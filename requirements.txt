@@ -2,5 +2,6 @@ streamlit
 pandas
 numpy
 matplotlib
-sklearn
+os
+scikit-learn
 time
