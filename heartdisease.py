@@ -76,6 +76,7 @@ def main():
                 no_drink_percent = round(reg.predict_proba(answers)[2][1] * 100, 2)
                 no_sleep_percent = round(reg.predict_proba(answers)[3][1] * 100, 2)
                 normal_weight_percent = round(reg.predict_proba(answers)[4][1] * 100, 2)
+                exercise_percent = round(reg.predict_proba(answers)[5][1] * 100, 2)
                 
                 # 당신이 담배를 피우지 않았다면
                 if (answers.at[0, 'Smoking'] == 1) & ((no_smoke_percent - percent) < 0):
@@ -96,7 +97,6 @@ def main():
             with col3:
                 # 당신이 육체활동을 한다면
                 if (answers.at[0, 'PhysicalActivity'] == 0) & ((exercise_percent - percent) < 0):
-                    exercise_percent = round(reg.predict_proba(answers)[5][1] * 100, 2)
                     st.metric('당신이 운동을 한다면', str(exercise_percent) + '%', str(round(exercise_percent - percent, 2)) + '%')
                     
                     
