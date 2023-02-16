@@ -17,29 +17,27 @@ def question(placeholder):
     base_df = pd.DataFrame(columns = ['BMI', 'Smoking', 'AlcoholDrinking', 'Stroke',
                                     'PhysicalHealth', 'MentalHealth', 'DiffWalking', 'Sex',
                                     'PhysicalActivity', 'SleepTime', 'Asthma', 'KidneyDisease',
-                                    'SkinCancer', 'AgeCategory_18-24', 'AgeCategory_25-29',
-                                    'AgeCategory_30-34', 'AgeCategory_35-39', 'AgeCategory_40-44',
-                                    'AgeCategory_45-49', 'AgeCategory_50-54', 'AgeCategory_55-59',
-                                    'AgeCategory_60-64', 'AgeCategory_65-69', 'AgeCategory_70-74',
-                                    'AgeCategory_75-79', 'AgeCategory_80 or older',
-                                    'Race_American Indian/Alaskan Native', 'Race_Asian', 'Race_Black',
+                                    'SkinCancer', 'AgeCategory_1824', 'AgeCategory_2529',
+                                    'AgeCategory_3034', 'AgeCategory_3539', 'AgeCategory_4044',
+                                    'AgeCategory_4549', 'AgeCategory_5054', 'AgeCategory_5559',
+                                    'AgeCategory_6064', 'AgeCategory_6569', 'AgeCategory_7074',
+                                    'AgeCategory_7579', 'AgeCategory_80orolder',
+                                    'Race_AmericanIndianAlaskanNative', 'Race_Asian', 'Race_Black',
                                     'Race_Hispanic', 'Race_Other', 'Race_White', 'GenHealth_Excellent',
                                     'GenHealth_Fair', 'GenHealth_Good', 'GenHealth_Poor',
-                                    'GenHealth_Very good', 'Diabetic_No',
-                                    'Diabetic_No, borderline diabetes', 'Diabetic_Yes',
-                                    'Diabetic_Yes (during pregnancy)'])
+                                    'GenHealth_Verygood', 'Diabetic_No', 'Diabetic_Noborderlinediabetes',
+                                    'Diabetic_Yes', 'Diabetic_Yesduringpregnancy'])
     
-    base_df.loc[0, ['AgeCategory_18-24', 'AgeCategory_25-29',
-                    'AgeCategory_30-34', 'AgeCategory_35-39', 'AgeCategory_40-44',
-                    'AgeCategory_45-49', 'AgeCategory_50-54', 'AgeCategory_55-59',
-                    'AgeCategory_60-64', 'AgeCategory_65-69', 'AgeCategory_70-74',
-                    'AgeCategory_75-79', 'AgeCategory_80 or older',
-                    'Race_American Indian/Alaskan Native', 'Race_Asian', 'Race_Black',
+    base_df.loc[0, ['AgeCategory_1824', 'AgeCategory_2529',
+                    'AgeCategory_3034', 'AgeCategory_3539', 'AgeCategory_4044',
+                    'AgeCategory_4549', 'AgeCategory_5054', 'AgeCategory_5559',
+                    'AgeCategory_6064', 'AgeCategory_6569', 'AgeCategory_7074',
+                    'AgeCategory_7579', 'AgeCategory_80orolder',
+                    'Race_AmericanIndianAlaskanNative', 'Race_Asian', 'Race_Black',
                     'Race_Hispanic', 'Race_Other', 'Race_White', 'GenHealth_Excellent',
                     'GenHealth_Fair', 'GenHealth_Good', 'GenHealth_Poor',
-                    'GenHealth_Very good', 'Diabetic_No',
-                    'Diabetic_No, borderline diabetes', 'Diabetic_Yes',
-                    'Diabetic_Yes (during pregnancy)']] = 0
+                    'GenHealth_Verygood', 'Diabetic_No', 'Diabetic_Noborderlinediabetes',
+                    'Diabetic_Yes', 'Diabetic_Yesduringpregnancy']] = 0
     
     with placeholder.form("my_form"):
         # 몸무게
@@ -49,31 +47,31 @@ def question(placeholder):
         # 나이(범주화 필요)
         AgeCategory = st.number_input('당신의 나이는 몇 살입니까(만 나이)?')
         if AgeCategory <= 24:
-            base_df.loc[0, 'AgeCategory_18-24'] = 1
+            base_df.loc[0, 'AgeCategory_1824'] = 1
         elif AgeCategory <= 29:
-            base_df.loc[0, 'AgeCategory_25-29'] = 1
+            base_df.loc[0, 'AgeCategory_2529'] = 1
         elif AgeCategory <= 34:
-            base_df.loc[0, 'AgeCategory_30-34'] = 1           
+            base_df.loc[0, 'AgeCategory_3034'] = 1           
         elif AgeCategory <= 39:
-            base_df.loc[0, 'AgeCategory_35-39'] = 1    
+            base_df.loc[0, 'AgeCategory_3539'] = 1    
         elif AgeCategory <= 44:
-            base_df.loc[0, 'AgeCategory_40-44'] = 1   
+            base_df.loc[0, 'AgeCategory_4044'] = 1   
         elif AgeCategory <= 49:
-            base_df.loc[0, 'AgeCategory_45-49'] = 1
+            base_df.loc[0, 'AgeCategory_4549'] = 1
         elif AgeCategory <= 54:
-            base_df.loc[0, 'AgeCategory_50-54'] = 1
+            base_df.loc[0, 'AgeCategory_5054'] = 1
         elif AgeCategory <= 59:
-            base_df.loc[0, 'AgeCategory_55-59'] = 1
+            base_df.loc[0, 'AgeCategory_5559'] = 1
         elif AgeCategory <= 64:
-            base_df.loc[0, 'AgeCategory_60-64'] = 1
+            base_df.loc[0, 'AgeCategory_6064'] = 1
         elif AgeCategory <= 69:
-            base_df.loc[0, 'AgeCategory_65-69'] = 1
+            base_df.loc[0, 'AgeCategory_6569'] = 1
         elif AgeCategory <= 74:
-            base_df.loc[0, 'AgeCategory_70-74'] = 1
+            base_df.loc[0, 'AgeCategory_7074'] = 1
         elif AgeCategory <= 79:
-            base_df.loc[0, 'AgeCategory_75-79'] = 1
+            base_df.loc[0, 'AgeCategory_7579'] = 1
         else:
-            base_df.loc[0, 'AgeCategory_80 or older'] = 1
+            base_df.loc[0, 'AgeCategory_80orolder'] = 1
 
         # 신체 부상
         PhysicalHealth = int(st.number_input('지난 30일 동안 질병과 부상을 포함해 아픈 일수는 며칠입니까?'))
@@ -97,7 +95,7 @@ def question(placeholder):
         elif Race == '기타':
             base_df.loc[0, 'Race_Other'] = 1
         elif Race == '알래스카/미국 원주민':
-            base_df.loc[0, 'Race_American Indian/Alaskan Native'] = 1
+            base_df.loc[0, 'Race_AmericanIndianAlaskanNative'] = 1
             
         
         # 당뇨
@@ -107,16 +105,16 @@ def question(placeholder):
         elif Diabetic == '아니요':
             base_df.loc[0, 'Diabetic_No'] = 1
         elif Diabetic == '애매하다':
-            base_df.loc[0, 'Diabetic_No, borderline diabetes'] = 1
+            base_df.loc[0, 'Diabetic_Noborderlinediabetes'] = 1
         elif Diabetic == '임신 중에만 당뇨병이였다(여성만 해당)':
-            base_df.loc[0, 'Diabetic_Yes (during pregnancy)'] = 1
+            base_df.loc[0, 'Diabetic_Yesduring pregnancy'] = 1
             
         # 건강
         GenHealth = st.selectbox('본인이 느끼기에 당신의 건강 정도는?', ['훌륭하다', '아주 좋다' , '좋다' , '그저 그렇다' , '나쁘다'])
         if GenHealth == '훌륭하다':
             base_df.loc[0, 'GenHealth_Excellent'] = 1
         elif GenHealth == '아주 좋다':
-            base_df.loc[0, 'GenHealth_Very good'] = 1
+            base_df.loc[0, 'GenHealth_Verygood'] = 1
         elif GenHealth == '좋다':
             base_df.loc[0, 'GenHealth_Good'] = 1
         elif GenHealth == '그저 그렇다':
@@ -125,7 +123,7 @@ def question(placeholder):
             base_df.loc[0, 'GenHealth_Poor'] = 1        
             
         # 흡연 여부
-        Smoking = yes_or_no_q('당신은 평생에 걸쳐 100개비 미만으로 흡연을 하셨습니까?')
+        Smoking = yes_or_no_q('당신은 평생 동안 적어도 100개 이상의 담배를 피우셨습니까?')
         base_df.loc[0, 'Smoking'] = Smoking
         # 술
         AlcoholDrinking = yes_or_no_q('당신은 과음자입니까?(남성은 주에 14잔 이상 , 여성은 주에 7잔 이상')
@@ -165,4 +163,28 @@ def question(placeholder):
             
         time.sleep(4)
         submitted = st.form_submit_button("AI 예측")
+        
+        # base_df 조정(다른 컬럼 조정)
+        base_df = base_df.append(base_df.loc[[0,0,0,0,0]]).reset_index(drop = True)
+        
+        # 당신이 담배를 피우지 않았다면
+        if base_df.at[0, 'Smoking'] == 1:
+            base_df.at[1, 'Smoking'] = 0
+
+        # 당신이 과음을 하지 않는다면
+        if base_df.at[0, 'AlcoholDrinking'] == 1:
+            base_df.at[2, 'AlcoholDrinking'] = 0
+
+        # 잠이 부족한 당신이 수면을 취한다면
+        if base_df.at[0, 'SleepTime'] <= 6:
+            base_df.at[3, 'SleepTime'] = 9
+
+        # 당신이 정상 범주의 BMI 지수를 가질 경우
+        if (base_df.at[0, 'BMI'] < 18.5) or (base_df.at[0, 'BMI'] > 25):
+            base_df.at[4, 'BMI'] = 22
+            
+        # 당신이 운동을 한다면
+        if base_df.at[0, 'PhysicalActivity'] == 0:
+            base_df.at[5, 'PhysicalActivity'] = 1
+        
         return base_df, submitted

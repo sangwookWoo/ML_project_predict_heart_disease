@@ -34,7 +34,7 @@ class model_selecting:
     def get_SMOTE(self):
         # SMOTE train 함수
         from imblearn.over_sampling import SMOTE
-        smote = SMOTE()
+        smote = SMOTE(random_state = 42)
         return smote.fit_resample(self.X_train,self.y_train)
     
     def get_model_apply(self,SMOTE = False):

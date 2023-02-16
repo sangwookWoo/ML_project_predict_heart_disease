@@ -15,6 +15,7 @@ import joblib
 # 사용자 함수
 from questions import *
 from visualization import *
+from catboost import CatBoostClassifier
 
 def main():
 
@@ -41,26 +42,66 @@ def main():
             
             # 로지스틱 모델 불러오기
             filePath, fileName = os.path.split(__file__)
-            reg = joblib.load(os.path.join(filePath,'logistic.pkl'))
+            # reg = joblib.load(os.path.join(filePath, 'data', 'logistic.pkl'))
+            reg = CatBoostClassifier()
+            reg.load_model(os.path.join(filePath, 'data', 'cat.pkl'))
             
-            # st.write(reg.predict_proba(answers)[0][1])
+            # 예측하기
             percent = round(reg.predict_proba(answers)[0][1] * 100, 2)
-            heart = reg.predict(answers)
-            if heart == 1:
-                st.markdown(f'#### AI 예측상 당신은 심장질환을 가졌습니다')
-            else :
-                st.markdown(f'#### 🎉AI 예측 상 당신은 심장질환이 없습니다🎉')
-
+            heart = reg.predict(answers)[0]
+            
             st.markdown('##### 💻 AI 예측')
                 
             progress = st.progress(0)
             latest_iteration = st.empty()
                 
-            for i in range(int(percent)):
-                latest_iteration.markdown(f'심장질환이 있을 확률은 {i}%입니다', unsafe_allow_html= True)
+            for i in range(int(percent) + 1):
                 progress.progress(i)
                 time.sleep(0.01)
+            latest_iteration.markdown(f'##### 심장질환이 있을 확률은 **:red[{percent}]**%입니다')
+            if heart == 1:
+                st.markdown(f'##### AI 예측상 당신은 심장질환을 **:red[가졌습니다]**')
+            else :
+                st.markdown(f'##### AI 예측 상 당신은 심장질환이 **:blue[없습니다]**')
                 
+            
+            st.write(' ')
+            st.write(' ')
+            st.markdown('##### 🚴 AI가 예측한 당신의 개선 방향입니다')
+            
+            col1, col2, col3 = st.columns(3)
+            with col1 :
+                
+                no_smoke_percent = round(reg.predict_proba(answers)[1][1] * 100, 2)
+                no_drink_percent = round(reg.predict_proba(answers)[2][1] * 100, 2)
+                no_sleep_percent = round(reg.predict_proba(answers)[3][1] * 100, 2)
+                normal_weight_percent = round(reg.predict_proba(answers)[4][1] * 100, 2)
+                
+                # 당신이 담배를 피우지 않았다면
+                if (answers.at[0, 'Smoking'] == 1) & ((no_smoke_percent - percent) < 0):
+                    st.metric('흡연을 하지 않았다면', str(no_smoke_percent) + '%', str(round(no_smoke_percent - percent,2)) + '%')
+                    
+                # 당신이 과음을 하지 않는다면
+                if (answers.at[0, 'AlcoholDrinking'] == 1) & ((no_drink_percent - percent) < 0):
+                    st.metric('과음을 하지 않는다면', str(no_drink_percent) + '%', str(round(no_drink_percent - percent, 2)) + '%')
+            with col2:
+                # 잠이 부족한 당신이 숙면을 취한다면
+                if (answers.at[0, 'SleepTime'] <= 6) & ((no_sleep_percent - percent) < 0):
+                    st.metric('숙면을 취한다면', str(no_sleep_percent) + '%', str(round(no_sleep_percent - percent,2)) + '%')
+
+                # 당신이 정상 범주의 BMI 지수를 가질 경우
+                if ((answers.at[0, 'BMI'] < 18.5) or (answers.at[0, 'BMI'] > 25)) & ((normal_weight_percent - percent) < 0):
+                    st.metric('정상범위의 체중을 가진다면', str(normal_weight_percent) + '%', str(round(normal_weight_percent - percent, 2)) + '%')
+
+            with col3:
+                # 당신이 육체활동을 한다면
+                if answers.at[0, 'PhysicalActivity'] == 0:
+                    exercise_percent = round(reg.predict_proba(answers)[5][1] * 100, 2)
+                    st.metric('당신이 운동을 한다면', str(exercise_percent) + '%', str(round(exercise_percent - percent, 2)) + '%')
+                    
+                    
+            st.write(' ')
+            st.write(' ')
             col1, col2 = st.columns(2)
             with col1:
                 # BMI 지수 시각화
@@ -68,10 +109,12 @@ def main():
                 bmi_visualization(answers.loc[0,'BMI'])
                 # st.markdown(f'심장질환 있을 확률<br>{percent}%입니다.', unsafe_allow_html= True)
             with col2:
-                st.dataframe(answers)
-                
+                pass
+            
             if st.button('다시 진단하기'):
                 st.experimental_rerun()
+                
+                
         
 
 @st.cache
