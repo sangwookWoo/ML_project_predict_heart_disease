@@ -40,7 +40,8 @@ def main():
             placeholder.write(' ')
             
             # 로지스틱 모델 불러오기
-            reg = joblib.load('C:/ML_project_predict_heart_disease/logistic.pkl')
+            filePath, fileName = os.path.split(__file__)
+            reg = joblib.load(os.path.join(filePath,'logistic.pkl'))
             
             # st.write(reg.predict_proba(answers)[0][1])
             percent = round(reg.predict_proba(answers)[0][1] * 100, 2)
