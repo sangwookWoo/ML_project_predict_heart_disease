@@ -16,6 +16,7 @@ import joblib
 from questions import *
 from visualization import *
 from catboost import CatBoostClassifier
+from xgboost import XGBClassifier
 
 def main():
 
@@ -44,8 +45,8 @@ def main():
             reg = load_model_wbm()
             
             # 예측하기
-            percent = round(reg.predict_proba(answers)[0][1] * 100, 2)
-            heart = reg.predict(answers)[0]
+            percent = round(reg.predict_proba(answers.values)[0][1] * 100, 2)
+            heart = reg.predict(answers.values)[0]
             
             st.markdown('##### 💻 AI 예측')
                 
@@ -69,11 +70,11 @@ def main():
             col1, col2, col3 = st.columns(3)
             with col1 :
                 
-                no_smoke_percent = round(reg.predict_proba(answers)[1][1] * 100, 2)
-                no_drink_percent = round(reg.predict_proba(answers)[2][1] * 100, 2)
-                no_sleep_percent = round(reg.predict_proba(answers)[3][1] * 100, 2)
-                normal_weight_percent = round(reg.predict_proba(answers)[4][1] * 100, 2)
-                exercise_percent = round(reg.predict_proba(answers)[5][1] * 100, 2)
+                no_smoke_percent = round(reg.predict_proba(answers.values)[1][1] * 100, 2)
+                no_drink_percent = round(reg.predict_proba(answers.values)[2][1] * 100, 2)
+                no_sleep_percent = round(reg.predict_proba(answers.values)[3][1] * 100, 2)
+                normal_weight_percent = round(reg.predict_proba(answers.values)[4][1] * 100, 2)
+                exercise_percent = round(reg.predict_proba(answers.values)[5][1] * 100, 2)
                 
                 # 당신이 담배를 피우지 않았다면
                 if (answers.at[0, 'Smoking'] == 1) & ((no_smoke_percent - percent) < 0):
@@ -125,13 +126,18 @@ def main():
                 
         
 
-@st.cache
+# @st.cache
 def load_model_wbm():
     filePath, fileName = os.path.split(__file__)
-    reg = CatBoostClassifier()
-    # 모델 불러오기
-    reg.load_model(os.path.join(filePath, 'data', 'cat.pkl'))
-    return reg
+    
+    # # catboost 모델 불러오기
+    # cat = CatBoostClassifier()
+    # cat.load_model(os.path.join(filePath, 'data', 'cat1.pkl'))
+    
+    # xgboost 모델 불러오기
+    xgb = XGBClassifier()
+    xgb.load_model(os.path.join(filePath, 'data', 'xgb3.pkl'))
+    return xgb
     
 if __name__ == "__main__":
     main()
