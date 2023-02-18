@@ -23,7 +23,7 @@ def main():
     st.set_page_config(page_title = '심장질환 AI 무료 예측')
 
     # 저장해놓은 csv 불러오기(캐싱)
-    df = load_data()
+    # df = load_data()
 
     
     # 제목
@@ -40,11 +40,8 @@ def main():
         with st.spinner('⚙️ AI가 예측 중입니다...'):
             placeholder.write(' ')
             
-            # 로지스틱 모델 불러오기
-            filePath, fileName = os.path.split(__file__)
-            # reg = joblib.load(os.path.join(filePath, 'data', 'logistic.pkl'))
-            reg = CatBoostClassifier()
-            reg.load_model(os.path.join(filePath, 'data', 'cat.pkl'))
+            # 모델 불러오기
+            reg = load_model_wbm()
             
             # 예측하기
             percent = round(reg.predict_proba(answers)[0][1] * 100, 2)
@@ -102,15 +99,26 @@ def main():
                     
             st.write(' ')
             st.write(' ')
-            col1, col2 = st.columns(2)
-            with col1:
-                # BMI 지수 시각화
-                st.markdown('##### 🍠 BMI 지수')
-                bmi_visualization(answers.loc[0,'BMI'])
-                # st.markdown(f'심장질환 있을 확률<br>{percent}%입니다.', unsafe_allow_html= True)
-            with col2:
-                pass
             
+            # 심장질환일 때, 심장병원 지도 시각화 / 심장질환이 아닐 때, 심장질환예방법 유튜브 비디오
+            if heart == 1:
+                st.markdown('##### 💊 심장질환 전조증상 관련 영상입니다.')
+                st.markdown('빠른 시일 내에 가까운 병원에 방문하세요.')
+                st.video('https://www.youtube.com/watch?v=2YLGBgsNB20')
+
+            else :
+                st.markdown('##### 💊 심장질환 예방수칙')
+                st.video('https://www.youtube.com/watch?v=onBY8L8DzAc')
+                
+            # col1, col2 = st.columns(2)
+            # with col1:
+            #     # BMI 지수 시각화
+            #     st.markdown('##### 🍠 BMI 지수')
+            #     bmi_visualization(answers.loc[0,'BMI'])
+            #     # st.markdown(f'심장질환 있을 확률<br>{percent}%입니다.', unsafe_allow_html= True)
+            # with col2:
+            #     pass
+                
             if st.button('다시 진단하기'):
                 st.experimental_rerun()
                 
@@ -118,10 +126,12 @@ def main():
         
 
 @st.cache
-def load_data():
+def load_model_wbm():
     filePath, fileName = os.path.split(__file__)
-    data =  pd.read_csv(os.path.join(filePath, 'data', 'heart_2020_final.csv'))
-    return data
+    reg = CatBoostClassifier()
+    # 모델 불러오기
+    reg.load_model(os.path.join(filePath, 'data', 'cat.pkl'))
+    return reg
     
 if __name__ == "__main__":
     main()
